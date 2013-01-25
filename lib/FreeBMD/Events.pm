@@ -6,9 +6,17 @@ use warnings;
 use CGI 'unescape';
 use Carp;
 
+use FreeBMD::Event;
+
 our $VERSION = '0.01';
 
 my @types = qw(B D M);
+
+=head2 FreeBMD::Events->parse($file)
+
+Parse a file of data and return an array of FreeBMD::Event objects
+
+=cut
 
 sub parse {
     my $class = shift;
@@ -49,34 +57,6 @@ sub parse {
     }
 
     return @events;
-}
-
-package FreeBMD::Event;
-
-use Moose;
-
-has 'type'     => (is => 'rw', isa => 'Str', required => 1);
-has 'qtr'      => (is => 'rw', isa => 'Str', required => 1);
-has 'year'     => (is => 'rw', isa => 'Int', required => 1);
-has 'surname'  => (is => 'rw', isa => 'Str', required => 1);
-has 'forename' => (is => 'rw', isa => 'Str', required => 1);
-has 'age'      => (is => 'rw', isa => 'Int');
-has 'district' => (is => 'rw', isa => 'Str', required => 1);
-has 'volume'   => (is => 'rw', isa => 'Str', required => 1);
-has 'page'     => (is => 'rw', isa => 'Str', required => 1);
-
-my $template = '[ type ] Q[ qtr ] [ year ]
-[ surname ] [ forename ]
-[ district ] [ volume ] [ page ]';
-
-sub to_string {
-    my $self = shift;
-
-    my $string = $template;
-
-    $string =~ s/\[\s*(\w+)\s+]/$self->$1/eg;
-
-    return $string;
 }
 
 1;
